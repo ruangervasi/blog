@@ -15,6 +15,13 @@ class Login extends Component {
         this.login = this.login.bind(this);
     }
 
+    componentDidMount(){
+        //verifica se já tem usuário logado
+        if(firebase.getCurrent()){
+            return this.props.history.replace('dashboard');
+        }
+    }
+
     entrar(e){
         this.login();
         e.preventDefault();
