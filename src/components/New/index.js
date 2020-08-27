@@ -34,11 +34,13 @@ class New extends Component {
                 image: this.state.imagem,
                 descricao: this.state.descricao,
                 autor: localStorage.nome,
+            }).catch((erro) =>{
+                alert(erro.code);
             });
 
             this.props.history.push('/dashboard');
         }else{
-            this.setState({alerta: "Preencha todos os campos!!!"})
+            //this.setState({alerta: "Preencha todos os campos!!!"})
         }
 
     }
@@ -56,7 +58,7 @@ class New extends Component {
                     <label>Imagem:</label>
                     <input type="text" placeholder="Imagem do post" value={this.setState.imagem} autoComplete="off" onChange={(e) => this.setState({imagem: e.target.value})}/>
                     <label>Texto:</label>
-                    <textarea type="text" placeholder="Texto do post" value={this.setState.texto} autoComplete="off" onChange={(e) => this.setState({titulo: e.target.texto})}/>
+                    <textarea type="text" placeholder="Texto do post" value={this.setState.descricao} autoComplete="off" onChange={(e) => this.setState({descricao: e.target.value})}/>
                     <button type="submit">Cadastrar</button>
                 </form>
             </div>

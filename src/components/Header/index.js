@@ -9,9 +9,9 @@ function Header(){
                 <Link to="/">
                     Blog Ruan ReactJS
                 </Link>
-                <Link to="/login">
-                    {(localStorage.nome !== '')? "      " : "Entrar"}       
-                </Link>
+                {(localStorage.nome !== '')?
+                <Link to="/dashboard" >Painel</Link>:
+                <Link to="/login" >Entrar</Link>}
             </div>
         </header>
     );
