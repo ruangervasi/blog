@@ -9,6 +9,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import New from './components/New';
+import Edit from './components/Edit';
 
 class App extends Component {
 
@@ -32,6 +33,7 @@ class App extends Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/dashboard" component={Dashboard} />
           <Route exact path="/dashboard/new" component={New} />
+          <Route exact path="/dashboard/edit" component={Edit} />
           <Route exact path="/register" component={Register} />
         </Switch>
       </BrowserRouter>

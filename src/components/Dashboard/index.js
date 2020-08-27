@@ -9,6 +9,7 @@ class Dashboard extends Component {
         this.state={
             nome: localStorage.nome,
             email: localStorage.email,
+            posts: []
         };
 
         this.logout = this.logout.bind(this);
@@ -26,6 +27,21 @@ class Dashboard extends Component {
             localStorage.email = info.val().mail;
             this.setState({nome: localStorage.nome, email: localStorage.email});
         })
+
+        firebase.app.ref('posts').once('value', (snapshot) => {
+            let state = this.state;
+            state.posts = [];
+            snapshot.forEach((childItem) => {
+                state.posts.push({
+                    key: childItem.key,
+                    titulo: childItem.val().titulo,
+                    image: childItem.val().image,
+                    descricao: childItem.val().descricao,
+                    autor: childItem.val().autor,
+                })
+            });
+            this.setState(state);
+        })
     }
 
     logout = async () =>{
@@ -42,12 +58,37 @@ class Dashboard extends Component {
 
         return (
             <div id="dashboard">
-                <div className="user-info">
-                    <h1>Olá {this.state.nome}!</h1>
-                    <Link to="/dashboard/new">Novo Post</Link>
+                <div className="topo">
+                    <div className="userinfo">
+                        <h3>Olá {this.state.nome}!</h3>
+                        <p>Logado com: {firebase.getCurrent()} </p>
+                        <button onClick={(e) => this.logout()}>Sair</button>
+                    </div>
                 </div>
-                    <p>Logado com: {firebase.getCurrent()} </p>
-                    <button onClick={(e) => this.logout()}>Sair</button>
+                <div className="newpost">
+                    <Link id="newpostlink" to="/dashboard/new">Novo Post</Link>
+                    <div className="posts">
+                        <h2>Posts</h2><br/>
+                    {this.state.posts.map((post) => {
+                    return(
+                        <article key={post.key}>
+                                <div className="title">
+                                    <strong>
+                                        <Link id="tituloPosts" to={{
+                                        pathname: '/dashboard/edit',
+                                        state: {
+                                            post:post
+                                        }}}>
+                                        {post.titulo}</Link>
+                                    </strong>
+                                </div>
+                                <p>{post.descricao.substr(0,50)}</p>
+                                <hr/>
+                        </article>
+                    )
+                })}
+                    </div>
+                </div>
             </div>
         );
     }

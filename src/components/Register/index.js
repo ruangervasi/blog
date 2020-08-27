@@ -40,8 +40,9 @@ class Register extends Component {
     render() {
         return (
             <div>
-                <h1>Novo Usuário</h1>
+
                 <form onSubmit={this.register} id="Register">
+                <h1>Novo Usuário</h1>
                     <label>Nome: </label>
                     <input type="text" value={this.state.nome} autoFocus autoComplete="off" onChange={(e)=> this.setState({nome: e.target.value})} placeholder="Digite seu nome..."/>
                     <label>Email: </label>

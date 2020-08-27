@@ -3,36 +3,47 @@ import { Link } from 'react-router-dom';
 import './index.css';
 import firebase from '../../firebase';
 
-class New extends Component {
+class Edit extends Component {
     constructor(props) {
         super(props);
         this.state = {
             titulo: '',
             imagem: '',
             descricao: '',
+            autor: '',
             alerta: '',
+            key: '',
         }
-        this.newPost = this.newPost.bind(this);
+        this.Editar = this.Editar.bind(this);
     }
 
     async componentDidMount(){
+        let { post } = this.props.location.state;
+
+        this.setState({
+            titulo: post.titulo,
+            imagem: post.image,
+            descricao: post.descricao,
+            autor: post.autor,
+            key: post.key
+        })
+
         if(!firebase.getCurrent()){
             this.props.history.replace('/login');
             return null;
         }
     }
 
-    newPost = async (e) => {
+    Editar = async (e) => {
         e.preventDefault();
 
-        if(this.state.titulo !== '' && this.state.imagem !== '' && this.state.descricao !==''){
+        if(this.state.titulo !== '' && this.state.imagem !== '' && this.state.descricao !=='' && this.state.autor !== ''){
             let posts = firebase.app.ref('posts');
-            let chave = posts.push().key;
-            await posts.child(chave).set({
+            await posts.child(this.state.key).set({
                 titulo: this.state.titulo,
                 image: this.state.imagem,
                 descricao: this.state.descricao,
-                autor: localStorage.nome,
+                autor: this.state.autor,
             })
 
             this.props.history.push('/dashboard');
@@ -48,7 +59,7 @@ class New extends Component {
                 <header id="new">
                     <Link to="/dashboard">Voltar</Link>
                 </header>
-                <form onSubmit={this.newPost}>
+                <form onSubmit={this.Editar}>
                     <span>{this.state.alerta}</span>
                     <label>Titulo:</label>
                     <input type="text" placeholder="Nome do post" value={this.state.titulo} autoFocus autoComplete="off" onChange={(e) => this.setState({titulo: e.target.value})}/>
@@ -56,11 +67,11 @@ class New extends Component {
                     <input type="text" placeholder="Imagem do post" value={this.state.imagem} autoComplete="off" onChange={(e) => this.setState({imagem: e.target.value})}/>
                     <label>Texto:</label>
                     <textarea type="text" placeholder="Texto do post" value={this.state.descricao} autoComplete="off" onChange={(e) => this.setState({descricao: e.target.value})}/>
-                    <button type="submit">Cadastrar</button>
+                    <button type="submit">Salvar</button>
                 </form>
             </div>
         );
     }
 }
 
-export default New;
+export default Edit;
