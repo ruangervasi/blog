@@ -10,7 +10,7 @@ function Header(){
                     Blog Ruan ReactJS
                 </Link>
                 <Link to="/login">
-                    Entrar
+                    {(localStorage.nome !== '')? "      " : "Entrar"}       
                 </Link>
             </div>
         </header>

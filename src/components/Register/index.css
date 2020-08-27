@@ -1,0 +1,41 @@
+form#Register{
+    width: 100%;
+    max-width: 680px;
+    margin: 30px auto 0;
+    padding: 30px;
+    background: #FFF;
+    border: 1px solid #DDD;
+    display: flex;
+    flex-direction: column;
+}
+
+form#Register input{
+     margin-bottom: 15px;
+     height: 40px;
+     border-radius: 4px;
+     border: 1px solid #DDD;
+     padding: 0 20px;
+     font-size: 14px;
+}
+
+form#Register button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    background: #272727;
+    color: #FFF;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+form#Register button:hover {
+    background: #202020;
+}
+
+form#Register a{
+    text-decoration: none;
+    text-align: center ;
+    color: #272727;
+    font-size: 15px;
+}
