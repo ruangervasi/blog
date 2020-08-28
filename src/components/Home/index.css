@@ -30,6 +30,7 @@ section#post article header span{
 
 section#post article > img {
     width: 100%;
+    max-height: 500;
 }
 
 section#post article footer {

@@ -28,7 +28,7 @@ class Dashboard extends Component {
             this.setState({nome: localStorage.nome, email: localStorage.email});
         })
 
-        firebase.app.ref('posts').once('value', (snapshot) => {
+        firebase.app.ref('posts').on('value', (snapshot) => {
             let state = this.state;
             state.posts = [];
             snapshot.forEach((childItem) => {

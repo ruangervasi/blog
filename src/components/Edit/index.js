@@ -9,10 +9,12 @@ class Edit extends Component {
         this.state = {
             titulo: '',
             imagem: '',
+            url: '',
             descricao: '',
             autor: '',
             alerta: '',
             key: '',
+            progress:0,
         }
         this.Editar = this.Editar.bind(this);
     }
@@ -23,6 +25,7 @@ class Edit extends Component {
         this.setState({
             titulo: post.titulo,
             imagem: post.image,
+            url: post.image,
             descricao: post.descricao,
             autor: post.autor,
             key: post.key
@@ -52,6 +55,46 @@ class Edit extends Component {
         }
 
     }
+
+    handleFile = async (e) =>{
+        
+        if(e.target.files[0]){
+            const image = e.target.files[0];
+            if(image.type === 'image/png' || image.type === 'image/jpeg'){
+                await this.setState({imagem: image});
+                this.handleUpload();
+            }else{
+                alert('Envie uma imagem do tipo PNG ou JPG');
+                this.setState({imagem: null});
+                return null;
+
+            }
+        }    
+    }
+
+    handleUpload = async () =>{
+        const { imagem } = this.state;
+        const currentUid = firebase.getCurrentUid();
+
+        const uploadTasks = firebase.storage.ref(`ímages/${currentUid}/${imagem.name}`)
+        .put(imagem);
+
+        await uploadTasks.on('state_changed',
+        (snapshot)=>{
+            const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
+            this.setState({progress});
+        },
+        (error)=>{
+            console.log(error);
+        },
+        ()=>{
+            firebase.storage.ref(`ímages/${currentUid}`)
+            .child(imagem.name).getDownloadURL()
+            .then(url => {
+                this.setState({url: url});
+            })
+        })
+    }
     
     render() {
         return (
@@ -64,7 +107,13 @@ class Edit extends Component {
                     <label>Titulo:</label>
                     <input type="text" placeholder="Nome do post" value={this.state.titulo} autoFocus autoComplete="off" onChange={(e) => this.setState({titulo: e.target.value})}/>
                     <label>Imagem:</label>
-                    <input type="text" placeholder="Imagem do post" value={this.state.imagem} autoComplete="off" onChange={(e) => this.setState({imagem: e.target.value})}/>
+                    <input type="file" onChange={this.handleFile}/><br/>
+                    {this.state.url !== '' ?
+                    <img src={this.state.url} width="250" height="150" alt="capa do post"/>
+                    :
+                    <progress value={this.state.progress} max="100"/>
+                    }
+                    <br/>
                     <label>Texto:</label>
                     <textarea type="text" placeholder="Texto do post" value={this.state.descricao} autoComplete="off" onChange={(e) => this.setState({descricao: e.target.value})}/>
                     <button type="submit">Salvar</button>
